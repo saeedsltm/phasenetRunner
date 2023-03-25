@@ -1,0 +1,46 @@
+---
+#============================ Data
+starttime: 2022-01-17T00:00:00
+endtime: 2022-01-18T00:00:00
+# Selected region for stations
+center: [56.5, 27.5]
+minradius: 0.0
+maxradius: 3.0
+# Selected region for earthquake location
+xlim_degree: [55.0, 58.0]
+ylim_degree: [26.0, 29.0]
+zlim_degree: [0.0, 20.0]
+# Data restriction
+degree2km: 111.19492474777779
+stations_inv: stations.xml
+picks_file: results/picks.csv
+network: "FN, BI"
+fdsn_urls: ["http://localhost:8080"]
+#============================ GaMMA settings
+use_dbscan: true
+method: BGMM
+# Velocity Model
+useEikonal: false
+zz: [0.0, 2.0, 19.0, 38.0, 46.0]
+vp: [2.5, 4.0,  6.1,  6.3,  7.2]
+vp_vs_ratio: 1.73
+h: 3.0
+# DBSCAN
+dbscan_eps: 15
+dbscan_min_samples: 3
+# Filtering
+min_picks_per_eq: 6
+min_p_picks_per_eq: 4
+min_s_picks_per_eq: 0
+max_sigma11: 2.0
+max_sigma22: 1.0
+max_sigma12: 1.0
+use_amplitude: true
+#============================ Visilization
+plotResults: true
+nTests: 5
+minmaxRes: 2.0 # s
+maxDist: 300   # km
+#============================ Catalog export
+outCatFmt: ["NORDIC", "SC3ML"]
+relocatedCat: "results/hyp.out"
