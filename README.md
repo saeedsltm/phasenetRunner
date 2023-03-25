@@ -1,2 +1,2 @@
 # phasenetRunner
-A python pack for picking seismic phases (P,S, AMP) using PhaseNet picker, GaMMa associator and visulaziation.
+A python pack for comprehensive automatic seismic phases picking (P, S, Amplitude). PhaseNet picker, GaMMa associator, and visualizing results.
