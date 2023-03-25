@@ -32,7 +32,7 @@ def prepareWaveforms(starttime, endtime):
                 "DB",
                 f"{starttime.strftime('%Y%m%d')}_{endtime.strftime('%Y%m%d')}",
                 "waveforms",
-                f"??.{station}..???__{starttime.strftime('%Y%m%d')}T000000Z__{endtime.strftime('%Y%m%d')}T000000Z.mseed"))
+                f"??.{station}.*.???__{starttime.strftime('%Y%m%d')}T000000Z__{endtime.strftime('%Y%m%d')}T000000Z.mseed"))
             st.write(os.path.join("tmp", f"{station}.mseed"))
             sta = st[0].stats.station
             chn = st[0].stats.channel[:-1]
