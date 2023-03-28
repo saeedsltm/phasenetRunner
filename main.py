@@ -24,14 +24,14 @@ class Main():
         exporter(self.config)
 
     def visualizeResults(self):
-        plotSeismicity(self.config)
-        pickerTest(self.config)
+        # plotSeismicity(self.config)
+        # pickerTest(self.config)
         pickerStats(self.config)
 
 
 if __name__ == "__main__":
     app = Main()
-    app.downloadRawData()
-    app.runPicker()
-    app.exportCatalog()
+    # app.downloadRawData()
+    # app.runPicker()
+    # app.exportCatalog()
     app.visualizeResults()

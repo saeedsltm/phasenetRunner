@@ -33,10 +33,12 @@ def runPhaseNet(config):
 
         # Apply PhaseNet predict method
         pick_outfile = f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}"
-        cmd = f"phasenet/runner.sh {pick_outfile}"
+        min_p_prob = config["min_p_prob"]
+        min_s_prob = config["min_s_prob"]
+        cmd = f"phasenet/runner.sh {pick_outfile} {min_p_prob} {min_s_prob}"
         os.system(cmd)
 
-        # Create DataFrame for stations and picks 
+        # Create DataFrame for stations and picks
         station_df, station_dict = prepareInventory(config, proj, st, et)
         pick_df = readPicks(pick_outfile)
 
@@ -59,6 +61,9 @@ def runPhaseNet(config):
             config["method"],
             pbar=pbar)
         event_index0 += len(catalogs)
+
+        if event_index0 == 0:
+            continue
 
         # Create catalog
         catalog_csv = os.path.join(

@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <Style id="raypath">
+      <LineStyle>
+        <color>ff929292</color>
+        <width>   2.500</width>
+      </LineStyle>
+    </Style>
+    <LookAt>
+      <longitude>  37.371</longitude>
+      <latitude> 37.113</latitude>
+      <altitude>
+         2000000.00    
+      </altitude>
+      <altitudeMode>absolute</altitudeMode>
+    </LookAt>
+<!-- Current location: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff0000ff</color>
+            <colorMode>normal</colorMode>
+            <scale>  0.32</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/pal2/icon26.png                             
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <gx:drawOrder>1</gx:drawOrder>
+          <coordinates>  37.371, 37.113,1.0</coordinates>
+        </Point>
+      </Placemark>
+<!-- Error ellipse: -->
+      <Placemark>
+        <Style>
+          <LineStyle>
+                    <color>ff000000</color>
+             <width> 2.00</width>
+          </LineStyle>
+        </Style>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.381,36.9390,0.000
+37.387,36.9430,0.000
+37.394,36.9500,0.000
+37.399,36.9590,0.000
+37.405,36.9710,0.000
+37.409,36.9860,0.000
+37.414,37.0020,0.000
+37.417,37.0200,0.000
+37.420,37.0390,0.000
+37.422,37.0600,0.000
+37.423,37.0810,0.000
+37.423,37.1030,0.000
+37.423,37.1250,0.000
+37.422,37.1470,0.000
+37.420,37.1680,0.000
+37.417,37.1890,0.000
+37.413,37.2080,0.000
+37.409,37.2260,0.000
+37.404,37.2420,0.000
+37.399,37.2560,0.000
+37.393,37.2680,0.000
+37.387,37.2770,0.000
+37.381,37.2830,0.000
+37.374,37.2870,0.000
+37.367,37.2890,0.000
+37.361,37.2870,0.000
+37.355,37.2830,0.000
+37.348,37.2760,0.000
+37.343,37.2660,0.000
+37.337,37.2540,0.000
+37.333,37.2400,0.000
+37.328,37.2240,0.000
+37.325,37.2060,0.000
+37.322,37.1870,0.000
+37.320,37.1660,0.000
+37.319,37.1450,0.000
+37.319,37.1230,0.000
+37.319,37.1010,0.000
+37.320,37.0790,0.000
+37.322,37.0580,0.000
+37.325,37.0370,0.000
+37.329,37.0180,0.000
+37.333,37.0000,0.000
+37.338,36.9840,0.000
+37.343,36.9700,0.000
+37.349,36.9590,0.000
+37.355,36.9490,0.000
+37.361,36.9430,0.000
+37.368,36.9390,0.000
+37.375,36.9370,0.000
+37.381,36.9390,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- OLD location: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ffff0000</color>
+            <colorMode>normal</colorMode>
+            <scale>  0.32</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/pal2/icon26.png                             
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <Point>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <coordinates>  37.250, 37.712,0.0</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                KHMR 
+        </description>
+        <Point>
+          <coordinates>  36.908,  37.344,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+36.908,37.3440,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ffff</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                KAMA 
+        </description>
+        <Point>
+          <coordinates>  36.668,  37.186,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+36.668,37.1860,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                MIND 
+        </description>
+        <Point>
+          <coordinates>  36.641,  37.264,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+36.641,37.2640,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                HASA 
+        </description>
+        <Point>
+          <coordinates>  36.487,  36.750,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+36.487,36.7500,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ffff</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                ATAB 
+        </description>
+        <Point>
+          <coordinates>  38.295,  37.470,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+38.295,37.4700,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                SANL 
+        </description>
+        <Point>
+          <coordinates>  38.989,  37.171,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+38.989,37.1710,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                DARE 
+        </description>
+        <Point>
+          <coordinates>  37.483,  38.571,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+37.483,38.5710,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                MAYA 
+        </description>
+        <Point>
+          <coordinates>  38.425,  38.325,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+38.425,38.3250,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff00ff00</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                HEKM 
+        </description>
+        <Point>
+          <coordinates>  37.959,  38.879,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+37.959,38.8790,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+<!-- Add station: -->
+      <Placemark>
+        <visibility>1</visibility>
+        <Style>
+          <IconStyle>
+            <color>ff0000ff</color>
+            <colorMode>normal</colorMode>
+            <scale>  1.10</scale>
+            <Icon>
+              <href>
+                http://maps.google.com/mapfiles/kml/shapes/triangle.png                         
+              </href>
+            </Icon>
+          </IconStyle>
+        </Style>
+        <description>
+                ELZG 
+        </description>
+        <Point>
+          <coordinates>  38.984,  38.498,0,</coordinates>
+        </Point>
+      </Placemark>
+<!-- Add raypath: -->
+      <Placemark>
+        <styleUrl>#raypath</styleUrl>
+        <LineStyle>
+          <color>ff0000ff</color>
+          <width>2.5</width>
+        </LineStyle>
+        <LineString>
+          <tessellate>1</tessellate>
+          <coordinates>
+37.371,37.1130,0.000
+38.984,38.4980,0.000
+          </coordinates>
+        </LineString>
+      </Placemark>
+  </Document>
+</kml>

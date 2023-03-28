@@ -1,22 +1,25 @@
 ---
 #============================ Data
-starttime: 2022-01-17T00:00:00
-endtime: 2022-01-18T00:00:00
+starttime: 2023-02-07T00:00:00
+endtime: 2023-02-08T00:00:00
 # Selected region for stations
-center: [56.5, 27.5]
+center: [37.25, 37.50]
 minradius: 0.0
-maxradius: 3.0
+maxradius: 2.5
 # Selected region for earthquake location
-xlim_degree: [55.0, 58.0]
-ylim_degree: [26.0, 29.0]
-zlim_degree: [0.0, 20.0]
+xlim_degree: [35.25, 39.25]
+ylim_degree: [35.50, 39.50]
+zlim_degree: [0.0, 30.0]
 # Data restriction
-degree2km: 111.19492474777779
+network: "CQ,  GE,  IM,  IU,  KO,  MP,  TU"
+fdsn_urls: ["http://localhost:8080"]
 stations_inv: stations.xml
 picks_file: results/picks.csv
-network: "FN, BI"
-fdsn_urls: ["http://localhost:8080"]
+#============================ PhaseNet settings
+min_p_prob: 0.30
+min_s_prob: 0.30
 #============================ GaMMA settings
+degree2km: 111.19492474777779
 use_dbscan: true
 method: BGMM
 # Velocity Model
@@ -26,15 +29,15 @@ vp: [2.5, 4.0,  6.1,  6.3,  7.2]
 vp_vs_ratio: 1.73
 h: 3.0
 # DBSCAN
-dbscan_eps: 15
-dbscan_min_samples: 3
+dbscan_eps: 15 # The maximum time between two neighbor picks
+dbscan_min_samples: 3 # The number neighbor to be considered as a core point
 # Filtering
 min_picks_per_eq: 6
-min_p_picks_per_eq: 4
-min_s_picks_per_eq: 0
-max_sigma11: 2.0
-max_sigma22: 1.0
-max_sigma12: 1.0
+min_p_picks_per_eq: 5
+min_s_picks_per_eq: 1
+max_sigma11: 1.5 # Max phase time residual (s)
+max_sigma22: 1.0 # Max phase amplitude residual (in log scale)
+max_sigma12: 1.0 # Max covariance term. (Usually not used)
 use_amplitude: true
 #============================ Visilization
 plotResults: true

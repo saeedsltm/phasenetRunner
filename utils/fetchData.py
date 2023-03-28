@@ -23,8 +23,9 @@ def fetchRawWaveforms(config):
         minradius=config["minradius"],
         maxradius=config["maxradius"])
 
-    print("+++ Downloading waveforms ...")
-    for st, et in tqdm(zip(startDateRange, endDateRange)):
+    for st, et in tqdm(
+            zip(startDateRange, endDateRange),
+            desc="+++ Downloading waveforms"):
 
         # Data Restrictions
         restrictions = Restrictions(

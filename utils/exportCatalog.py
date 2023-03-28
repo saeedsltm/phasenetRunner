@@ -9,29 +9,20 @@ from pandas import read_csv, Series, date_range
 from obspy.core import event
 from obspy import UTCDateTime as utc
 from utils.prepareData import prepareInventory
+from utils.extra import weightMapper
 from pyproj import Proj
 import os
 from datetime import timedelta as td
+from tqdm import tqdm
+from numpy import array
 
 
 class feedCatalog():
     """An obspy Catalog Contractor
     """
 
-    def __init__(self):
-        pass
-
-    def weightMapper(self, w):
-        if 0.8 < w <= 1.0:
-            return 0
-        elif 0.6 < w <= 0.8:
-            return 1
-        elif 0.4 < w <= 0.6:
-            return 2
-        elif 0.2 < w <= 0.4:
-            return 3
-        elif 0.0 < w <= 0.2:
-            return 4
+    def __init__(self, config):
+        self.config = config
 
     def setPick(self, eventPick):
         """Fill the Obspy pick object
@@ -54,12 +45,18 @@ class feedCatalog():
                 "nordic_pick_weight": {
                     "value": 0,
                     "namespace": "https://github.com/AI4EPS/PhaseNet"}}})
-        pick.extra.nordic_pick_weight.value = self.weightMapper(
-            phase_score)
+        pick.extra.nordic_pick_weight.value = weightMapper(
+            array([phase_score]),
+            minW=self.config[f"min_{phase_type.lower()}_prob"],
+            reverse=False)
         pick.time = utc(phase_time)
         net, sta, loc, chn = station_id.split(".")
         chn = chn+"Z" if "P" in pick.phase_hint.upper() else chn+"E"
-        pick.waveform_id = event.WaveformStreamID(net, sta, chn)
+        pick.waveform_id = event.WaveformStreamID(
+            network_code=net,
+            station_code=sta,
+            location_code=loc,
+            channel_code=chn)
         pick.evaluation_mode = "automatic"
         return pick
 
@@ -77,7 +74,11 @@ class feedCatalog():
         pick.time = utc(eventPick["phase_time"])
         net, sta, loc, chn = eventPick["station_id"].split(".")
         chn = chn+"E"
-        pick.waveform_id = event.WaveformStreamID(net, sta, chn)
+        pick.waveform_id = event.WaveformStreamID(
+            network_code=net,
+            station_code=sta,
+            location_code=loc,
+            channel_code=chn)
         pick.evaluation_mode = "automatic"
         return pick
 
@@ -113,7 +114,11 @@ class feedCatalog():
         amplitude.unit = "m"
         amplitude.pick_id = pick_id
         net, sta, loc, chn = eventPick["station_id"].split(".")
-        amplitude.waveform_id = event.WaveformStreamID(net, sta, chn)
+        amplitude.waveform_id = event.WaveformStreamID(
+            network_code=net,
+            station_code=sta,
+            location_code=loc,
+            channel_code=chn)
         amplitude.magnitude_hint = "ML"
         amplitude.evaluation_mode = "automatic"
         amplitude.evaluation_status = "preliminary"
@@ -227,7 +232,9 @@ class feedCatalog():
             catalog.append(Event)
         return catalog
 
-    def exportTo(self, config, fmt="NORDIC"):
+    def exportTo(self, fmt="NORDIC"):
+
+        config = self.config
 
         startTime = config["starttime"]
         endTime = config["endtime"]
@@ -243,13 +250,17 @@ class feedCatalog():
                     +lon_0={config['center'][0]}\
                     +lat_0={config['center'][1]}\
                     +units=km")
-        for st, et in zip(startDateRange, endDateRange):
+        for st, et in tqdm(
+                zip(startDateRange, endDateRange),
+                desc="+++ Exporting catalogs"):
             catalog = os.path.join(
                 "results",
                 f"catalog_{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}.csv")
             pick = os.path.join(
                 "results",
                 f"picks_{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}.csv")
+            if not os.path.exists(catalog) and not os.path.exists(pick):
+                continue
             catalog_df = read_csv(catalog, sep="\t")
             catalog_df.sort_values(by=["time"], inplace=True)
             pick_df = read_csv(pick, sep="\t")
@@ -273,5 +284,5 @@ class feedCatalog():
 
 
 def exporter(config):
-    engine = feedCatalog()
-    engine.exportTo(config)
+    engine = feedCatalog(config)
+    engine.exportTo()

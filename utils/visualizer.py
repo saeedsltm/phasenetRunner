@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
 import os
-from glob import glob
 from numpy import random, unique, mean, abs, min, max, sqrt, arange, histogram
-from utils.extra import handle_masked_arr
+from utils.extra import handle_masked_arr, weighted_avg_and_std, weightMapper
 from utils.prepareData import prepareInventory
 import proplot as plt
 from pandas import DataFrame, read_csv, Series, date_range
@@ -23,15 +22,21 @@ def plotSeismicity(config):
     endDateRange = date_range(startTime+td(days=1), endTime, freq="1D")
 
     if config["plotResults"]:
-        catalogs = glob(os.path.join("results", "catalog_*.csv"))
         proj = Proj(f"+proj=sterea\
                     +lon_0={config['center'][0]}\
                     +lat_0={config['center'][1]}\
                     +units=km")
-        print("+++ Plotting seismicity maps ...")
-        for catalog, st, et in tqdm(zip(
-                catalogs, startDateRange, endDateRange)):
+        for st, et in tqdm(
+                zip(startDateRange, endDateRange),
+                desc="+++ Plotting seismicity maps"):
+            catalog = os.path.join(
+                "results",
+                f"catalog_{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}.csv")
+            if not os.path.exists(catalog):
+                continue
             catalog = read_csv(catalog, sep="\t")
+            if len(catalog) <= 1:
+                continue
             station_df, station_dict = prepareInventory(config, proj, st, et)
             catalog[[
                 "x(km)",
@@ -54,20 +59,20 @@ def plotSeismicity(config):
                 catalog["y(km)"],
                 c=catalog["z(km)"],
                 s=catalog["magnitude"],
-                cmap="viridis")
+                cmap="inferno_r",
+                mew=0.25, mec="k", mfc="r")
             cbar = fig.colorbar(cb)
             cbar.ax.set_ylim(cbar.ax.get_ylim()[::-1])
             cbar.set_label("Depth[km]")
-
-            ax.plot(
+            ax.scatter(
                 station_df["x(km)"],
                 station_df["y(km)"],
-                "r^", ms=10, mew=1, mec="k")
+                m="^", s=40, mew=0.5, mec="k", mfc="gray")
             for x, y, s in zip(
                     station_df["x(km)"],
                     station_df["y(km)"],
                     station_df["id"]):
-                ax.text(x, y, s.split(".")[1])
+                ax.text(x, y, s.split(".")[1], fontsize=5)
             ax.set_xlabel("Easting [km]")
             ax.set_ylabel("Northing [km]")
             fig.save(os.path.join(
@@ -82,8 +87,9 @@ def pickerTest(config):
     startDateRange = date_range(startTime, endTime-td(days=1), freq="1D")
     endDateRange = date_range(startTime+td(days=1), endTime, freq="1D")
 
-    print("+++ Plotting picker test samples ...")
-    for st, et in tqdm(zip(startDateRange, endDateRange)):
+    for st, et in tqdm(
+            zip(startDateRange, endDateRange),
+            desc="+++ Plotting picker test samples"):
 
         stream = read(os.path.join(
             "DB",
@@ -111,6 +117,9 @@ def pickerTest(config):
                     +lon_0={config['center'][0]}\
                     +lat_0={config['center'][1]}\
                     +units=km")
+
+        if not os.path.exists(catalog) and not os.path.exists(pick):
+            continue
 
         catalog_df = read_csv(catalog, sep="\t")
         catalog_df.sort_values(by=["time"], inplace=True)
@@ -199,8 +208,7 @@ def pickerStats(config):
     dist_S, ttim_S, resi_S, wegt_S = [], [], [], []
 
     # Loop over catalog
-    print("+++ export catalog to DataFrame ...")
-    for event in tqdm(catalog):
+    for event in tqdm(catalog, desc="+++ Exporting catalog to DataFrame"):
         preferred_origin = event.preferred_origin()
         picks = event.picks
         arrivals = preferred_origin.arrivals
@@ -276,11 +284,11 @@ def pickerStats(config):
 
     p = ax.scatter(
         df_P["DIST_P"], df_P["TTIM_P"],
-        m="^", c=df_P["RESI_P"], s=5, cmap="rdylbu", vmin=-1, vmax=1,
+        m="^", c=df_P["RESI_P"], s=5, cmap="rdylbu_r", vmin=-1, vmax=1,
         ec="k", ew=0.2)
     s = ax.scatter(
         df_S["DIST_S"], df_S["TTIM_S"],
-        m="s", c=df_S["RESI_S"], s=5, cmap="rdylbu", vmin=-1, vmax=1,
+        m="s", c=df_S["RESI_S"], s=5, cmap="rdylbu_r", vmin=-1, vmax=1,
         mec="k", mew=0.2)
 
     ax.colorbar(p, loc="r", label="Residuals (s)")
@@ -288,8 +296,7 @@ def pickerStats(config):
     fig.save(os.path.join("results", "traveltime.png"))
 
     # Statistics figures
-    print("+++ Plot statistics ...")
-    for station in tqdm(data.keys()):
+    for station in tqdm(data.keys(), desc="+++ Plotting statistics"):
 
         db_P = DataFrame(
             {
@@ -308,13 +315,13 @@ def pickerStats(config):
             }
         )
 
-        avg_P = db_P["RESI_P"].mean()
-        std_P = db_P["RESI_P"].std()
-        avg_S = db_S["RESI_S"].mean()
-        std_S = db_S["RESI_S"].std()
-
         db_P.dropna(inplace=True)
         db_S.dropna(inplace=True)
+
+        W_M_RESI_P, W_STD_RESI_P = weighted_avg_and_std(
+            db_P["RESI_P"], weightMapper(db_P["WEGT_P"], reverse=True))
+        W_M_RESI_S, W_STD_RESI_S = weighted_avg_and_std(
+            db_S["RESI_S"], weightMapper(db_S["WEGT_S"], reverse=True))
 
         fig, axs = plt.subplots(ncols=2)
         [ax.grid(ls=":") for ax in axs]
@@ -324,18 +331,18 @@ def pickerStats(config):
             ylabel="Number of picks (#)",
         )
 
-        W = [0, 1, 2, 3]
-        C = ["gray2", "gray4", "gray6", "gray8"]
-        dr = 0.05
+        W = [0, 1, 2, 3, 4]
+        C = ["gray2", "gray4", "gray6", "gray8", "red9"]
+        dr = 0.1
         bins = arange(-config["minmaxRes"], config["minmaxRes"] + dr, dr)
         areas = []
         for d, l, ax in zip([db_P, db_S], ["P", "S"], axs):
             if l == "P":
-                s = "$\overline{m}=$"+f"{avg_P:0.2f}" + \
-                    ", $\mu=$"+f"{std_P:0.2f}"
+                s = "$\overline{m}_w=$"+f"{W_M_RESI_P:0.2f}" + \
+                    ", $\mu_w=$"+f"{W_STD_RESI_P:0.2f}"
             if l == "S":
-                s = "$\overline{m}=$"+f"{avg_S:0.2f}" + \
-                    ", $\mu=$"+f"{std_S:0.2f}"
+                s = "$\overline{m}_w=$"+f"{W_M_RESI_S:0.2f}" + \
+                    ", $\mu_w=$"+f"{W_STD_RESI_S:0.2f}"
             ax.format(
                 ultitle=s,
                 urtitle=l)

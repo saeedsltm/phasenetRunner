@@ -21,13 +21,13 @@ def prepareWaveforms(starttime, endtime):
     inv.write(os.path.join("tmp", "stations.xml"), format="STATIONXML")
 
     # Get Station Codes
-    stations = [s.split(".")[1][:4].strip()
-                for s in inv.get_contents()["stations"]]
+    stations = sorted(set([
+        s.split(".")[1] for s in inv.get_contents()["channels"]
+        ]))
 
-    print("+++ Preparing raw data ...")
     with open(os.path.join("tmp", "mseed.csv"), "w") as fp:
         fp.write("fname,E,N,Z\n")
-        for station in tqdm(stations):
+        for station in tqdm(stations, desc="+++ Preparing raw data"):
             st = read(os.path.join(
                 "DB",
                 f"{starttime.strftime('%Y%m%d')}_{endtime.strftime('%Y%m%d')}",
@@ -49,13 +49,13 @@ def prepareInventory(config, proj, st, et):
     inv = read_inventory(stationxml)
     station_df = []
     for net in inv:
-        for station in net:
-            for channel in station:
+        for sta in net:
+            for chn in sta:
                 station_df.append({
-                    "id": f"{net.code}.{station.code}..{channel.code[:-1]}",
-                    "longitude": station.longitude,
-                    "latitude": station.latitude,
-                    "elevation(m)": station.elevation,
+                    "id": f"{net.code}.{sta.code}.{chn.location_code}.{chn.code[:-1]}",
+                    "longitude": sta.longitude,
+                    "latitude": sta.latitude,
+                    "elevation(m)": sta.elevation,
                     "unit": "m/s",
                     "component": "E,N,Z",
                 })
