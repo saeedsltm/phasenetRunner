@@ -60,7 +60,8 @@ def plotSeismicity(config):
                 c=catalog["z(km)"],
                 s=catalog["magnitude"],
                 cmap="inferno_r",
-                mew=0.25, mec="k", mfc="r")
+                mew=0.25, mec="k", mfc="r",
+                vmin=0)
             cbar = fig.colorbar(cb)
             cbar.ax.set_ylim(cbar.ax.get_ylim()[::-1])
             cbar.set_label("Depth[km]")
@@ -91,16 +92,16 @@ def pickerTest(config):
             zip(startDateRange, endDateRange),
             desc="+++ Plotting picker test samples"):
 
-        stream = read(os.path.join(
+        streamFile = os.path.join(
             "DB",
             f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}",
             "waveforms",
-            f"??.*..???__{st.strftime('%Y%m%d')}T000000Z__{et.strftime('%Y%m%d')}T000000Z.mseed"))
-        inv = read_inventory(os.path.join(
-            "DB",
-            f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}",
-            "stations",
-            "*.xml"))
+            f"??.*.*.???__{st.strftime('%Y%m%d')}T000000Z__{et.strftime('%Y%m%d')}T000000Z.mseed")
+
+        try:
+            stream = read(streamFile)
+        except Exception:
+            return
         stream.merge()
         stream = handle_masked_arr(stream)
 
@@ -196,7 +197,7 @@ def pickerTest(config):
 
 
 def pickerStats(config):
-    if not config["relocatedCat"].strip():
+    if not os.path.exists(config["relocatedCat"]):
         return
 
     print("+++ Reading catalog ...")
@@ -273,7 +274,7 @@ def pickerStats(config):
     df_S["DIST_S"] = d2k(df_S["DIST_S"])
 
     # Travel times curve
-    print("+++ Plot travel time curve ...")
+    print("\n+++ Plot travel time curve ...")
     fig, axs = plt.subplots()
     [ax.grid(ls=":") for ax in axs]
     ax = axs[0]
@@ -284,15 +285,16 @@ def pickerStats(config):
 
     p = ax.scatter(
         df_P["DIST_P"], df_P["TTIM_P"],
-        m="^", c=df_P["RESI_P"], s=5, cmap="rdylbu_r", vmin=-1, vmax=1,
+        m="^", c=df_P["RESI_P"], s=5, cmap="rdylbu_r",
+        vmin=-config["minmaxRes"], vmax=config["minmaxRes"],
         ec="k", ew=0.2)
     s = ax.scatter(
         df_S["DIST_S"], df_S["TTIM_S"],
-        m="s", c=df_S["RESI_S"], s=5, cmap="rdylbu_r", vmin=-1, vmax=1,
+        m="s", c=df_S["RESI_S"], s=5, cmap="rdylbu_r",
+        vmin=-config["minmaxRes"], vmax=config["minmaxRes"],
         mec="k", mew=0.2)
 
     ax.colorbar(p, loc="r", label="Residuals (s)")
-    # ax.colorbar(s, loc="r", label="S-residuals (s)")
     fig.save(os.path.join("results", "traveltime.png"))
 
     # Statistics figures
@@ -329,6 +331,8 @@ def pickerStats(config):
             suptitle=station,
             xlabel="Time residues (s)",
             ylabel="Number of picks (#)",
+            xlocator=("maxn", 5),
+            xlim=(-config["minmaxRes"], config["minmaxRes"])
         )
 
         W = [0, 1, 2, 3, 4]

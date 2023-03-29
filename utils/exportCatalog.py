@@ -45,10 +45,11 @@ class feedCatalog():
                 "nordic_pick_weight": {
                     "value": 0,
                     "namespace": "https://github.com/AI4EPS/PhaseNet"}}})
-        pick.extra.nordic_pick_weight.value = weightMapper(
+        nordic_pick_weight = weightMapper(
             array([phase_score]),
             minW=self.config[f"min_{phase_type.lower()}_prob"],
-            reverse=False)
+            reverse=False)[0]
+        pick.extra.nordic_pick_weight.value = int(nordic_pick_weight)
         pick.time = utc(phase_time)
         net, sta, loc, chn = station_id.split(".")
         chn = chn+"Z" if "P" in pick.phase_hint.upper() else chn+"E"

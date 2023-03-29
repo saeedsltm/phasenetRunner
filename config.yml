@@ -1,17 +1,17 @@
 ---
 #============================ Data
-starttime: 2023-02-07T00:00:00
-endtime: 2023-02-08T00:00:00
+starttime: 2021-12-10T00:00:00
+endtime: 2022-01-20T00:00:00
 # Selected region for stations
-center: [37.25, 37.50]
+center: [56.5, 27.5]
 minradius: 0.0
 maxradius: 2.5
 # Selected region for earthquake location
-xlim_degree: [35.25, 39.25]
-ylim_degree: [35.50, 39.50]
+xlim_degree: [55.0, 58.0]
+ylim_degree: [26.0, 29.0]
 zlim_degree: [0.0, 30.0]
 # Data restriction
-network: "CQ,  GE,  IM,  IU,  KO,  MP,  TU"
+network: "FN, BI"
 fdsn_urls: ["http://localhost:8080"]
 stations_inv: stations.xml
 picks_file: results/picks.csv
@@ -32,8 +32,8 @@ h: 3.0
 dbscan_eps: 15 # The maximum time between two neighbor picks
 dbscan_min_samples: 3 # The number neighbor to be considered as a core point
 # Filtering
-min_picks_per_eq: 6
-min_p_picks_per_eq: 5
+min_picks_per_eq: 5
+min_p_picks_per_eq: 4
 min_s_picks_per_eq: 1
 max_sigma11: 1.5 # Max phase time residual (s)
 max_sigma22: 1.0 # Max phase amplitude residual (in log scale)
@@ -43,7 +43,7 @@ use_amplitude: true
 plotResults: true
 nTests: 5
 minmaxRes: 2.0 # s
-maxDist: 300   # km
+maxDist: 250   # km
 #============================ Catalog export
 outCatFmt: ["NORDIC", "SC3ML"]
 relocatedCat: "results/hyp.out"

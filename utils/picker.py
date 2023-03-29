@@ -29,7 +29,9 @@ def runPhaseNet(config):
     for st, et in zip(startDateRange, endDateRange):
 
         # Prepare One-day-length data
-        prepareWaveforms(st, et)
+        data_exists = prepareWaveforms(st, et)
+        if not data_exists:
+            continue
 
         # Apply PhaseNet predict method
         pick_outfile = f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}"

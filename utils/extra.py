@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 from yaml import SafeLoader, load
-from numpy import ma, average, sqrt, where, linspace, append
+from numpy import ma, average, sqrt, where, logspace, append
 import os
 import sys
-
+from sklearn.preprocessing import MinMaxScaler
 
 def readConfiguration():
     if not os.path.exists("config.yml"):
@@ -39,10 +39,12 @@ def weighted_avg_and_std(values, weights):
 
 def weightMapper(weights, minW=0, reverse=False):
     if not reverse:
-        W = linspace(minW, 1.0, 5)[::-1]
+        sc = MinMaxScaler(feature_range=(minW, 1.0))
+        W = logspace(minW, 1.0, 5)[::-1]
+        W = sc.fit_transform(W.reshape(-1, 1))
         W = append(W, 0)
         for w1, w2, w in zip(W[:-1], W[1:], range(5)):
-            weights = where((weights >= w2) & (weights < w1), w, weights)
+            weights = where((weights > w2) & (weights <= w1), w, weights)
     else:
         weights = where(weights == 0, 1.00, weights)
         weights = where(weights == 1, 0.75, weights)

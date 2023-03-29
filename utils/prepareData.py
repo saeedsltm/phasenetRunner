@@ -13,17 +13,23 @@ def prepareWaveforms(starttime, endtime):
     path.mkdir(parents=True, exist_ok=True)
 
     # Read Station Data
-    inv = read_inventory(os.path.join(
+    invFile = os.path.join(
         "DB",
         f"{starttime.strftime('%Y%m%d')}_{endtime.strftime('%Y%m%d')}",
         "stations",
-        "*.xml"))
+        "*.xml")
+
+    try:
+        inv = read_inventory(invFile)
+    except Exception:
+        return
+
     inv.write(os.path.join("tmp", "stations.xml"), format="STATIONXML")
 
     # Get Station Codes
     stations = sorted(set([
         s.split(".")[1] for s in inv.get_contents()["channels"]
-        ]))
+    ]))
 
     with open(os.path.join("tmp", "mseed.csv"), "w") as fp:
         fp.write("fname,E,N,Z\n")
@@ -38,6 +44,7 @@ def prepareWaveforms(starttime, endtime):
             chn = st[0].stats.channel[:-1]
             fp.write(
                 f"{sta}.mseed,{chn}E,{chn}N,{chn}Z\n")
+    return True
 
 
 def prepareInventory(config, proj, st, et):

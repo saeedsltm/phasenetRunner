@@ -25,7 +25,7 @@ class Main():
 
     def visualizeResults(self):
         # plotSeismicity(self.config)
-        # pickerTest(self.config)
+        pickerTest(self.config)
         pickerStats(self.config)
 
 
