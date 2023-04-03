@@ -184,7 +184,8 @@ def pickerTest(config):
                     ls = '-'
                 else:
                     ls = '--'
-                ax.plot([x, x], [y - 10, y + 10], 'k', ls=ls, lw=0.5)
+                ax.plot([x, x], [y - 3, y + 3], 'k', ls=ls, lw=0.5)
+                ax.text(x, y+3, f"{pick.phase_score:0.1f}", fontsize=3)
 
             ax.set_ylim(0)
             ax.set_xlim(0, max(trace.times()))
