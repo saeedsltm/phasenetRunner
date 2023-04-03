@@ -92,18 +92,18 @@ def pickerTest(config):
             zip(startDateRange, endDateRange),
             desc="+++ Plotting picker test samples"):
 
-        streamFile = os.path.join(
-            "DB",
-            f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}",
-            "waveforms",
-            f"??.*.*.???__{st.strftime('%Y%m%d')}T000000Z__{et.strftime('%Y%m%d')}T000000Z.mseed")
+        # streamFile = os.path.join(
+        #     "DB",
+        #     f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}",
+        #     "waveforms",
+        #     f"??.*.*.???__{st.strftime('%Y%m%d')}T000000Z__{et.strftime('%Y%m%d')}T000000Z.mseed")
 
-        try:
-            stream = read(streamFile)
-        except Exception:
-            return
-        stream.merge()
-        stream = handle_masked_arr(stream)
+        # try:
+        #     stream = read(streamFile)
+        # except Exception:
+        #     return
+        # stream.merge()
+        # stream = handle_masked_arr(stream)
 
         catalog = os.path.join(
             "results",
@@ -150,13 +150,24 @@ def pickerTest(config):
 
             for station in unique(
                     [pick.station_id.split(".")[1] for pick in event_picks]):
+                streamFile = os.path.join(
+                    "DB",
+                    f"{st.strftime('%Y%m%d')}_{et.strftime('%Y%m%d')}",
+                    "waveforms",
+                    f"??.{station}.*.???__{st.strftime('%Y%m%d')}T000000Z__{et.strftime('%Y%m%d')}T000000Z.mseed")
+                try:
+                    stream = read(streamFile)
+                except Exception:
+                    continue
+                stream.merge()
+                stream = handle_masked_arr(stream)
                 sub.append(stream.select(station=station, channel="??Z")[0])
 
             sub = sub.slice(first - 5, last + 5)
 
             sub = sub.copy()
             sub.detrend()
-            sub.filter("bandpass", freqmin=4, freqmax=15)
+            sub.filter("bandpass", freqmin=2, freqmax=15)
 
             fig, axs = plt.subplots()
             ax = axs[0]
@@ -228,6 +239,8 @@ def pickerStats(config):
                 for pick in picks if pick.resource_id ==
                 arrival.pick_id][0]
             ttm = art - preferred_origin.time
+            if abs(ttm) > 1e3:
+                continue
             if sta not in data:
                 data[sta] = {
                     "DIST_P": [],
